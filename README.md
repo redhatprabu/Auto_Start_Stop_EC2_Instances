@@ -57,11 +57,11 @@ To configure and implement this solution, we use the following high-level featur
 ## Stack DeepDive - EC2_start_stop.yaml
 
 
-*	Configure the following tags in Amazon EC2: For example, key = schedule, value = HH:MM-HH:MM For example: 08:00-23:00 (use a '-' between the start and stop times). If you set the "schedule" tag to 09:00-23:00, the EC2 instance will start at 9AM and stop at 11PM.
-*   AutoStopStartEC2Schedule – Cron is set to run hourly, for example, at 12:05, with subsequent runs at 13:05 and 14:05. You can change it based on your business requirements.
-*   LambdaEC2Role – IAM Role to assume for lambda service
-*   LambdaStartStopEC2 – lambda serverless function with code written in Python3.9 as input
-*   StartStopEC2Rule – Eventbridge rule to run this script at the specified time.
-*   Modify the timings based on your business needs on eventbridge settings <code>cron(05 * * * ? *)</code> . This scripts runs every hour after 5 mins .eg : 01:05 AM, 02:05 AM, 03:05 AM
-*   PermissionForEventsToInvokeLambda – Permission to invoke lambda function by your eventbridgerule
+*	Configure the following tags in Amazon EC2: For example, key = schedule, value = HH:MM-HH:MM For example: 08:00-23:00 (use a '-' between the start and stop times). If you set the "schedule" tag to 09:00-23:00, the EC2 instance will starts at <b>9AM</b> and stops at </b>11PM</b>.
+*   </b> AutoStopStartEC2Schedule </b> Cron is set to run hourly, for example, at 12:05, with subsequent runs at 13:05 and 14:05. You can change it based on your business requirements.
+*   <b>LambdaEC2Role</b> – IAM Role to assume for lambda service
+*   <b>LambdaStartStopEC2</b> – lambda serverless function with code written in Python3.9 as input
+*   <b>StartStopEC2Rule</b> – Eventbridge rule to run this script at the specified time.
+*   <b>StartStopEC2Rule</b>Modify the timings based on your business needs on eventbridge settings <code>cron(05 * * * ? *)</code> This scripts runs every hour after 5 mins .eg : <code> 01:05 AM, 02:05 AM, 03:05 AM </code>
+*   <b>PermissionForEventsToInvokeLambda</b> – Permission to invoke lambda function by your eventbridgerule
 
