@@ -1,4 +1,5 @@
-## Cloudformation template for stopping and starting lower environment EC2 instances after business hours and before the business day begins.
+### Cloudformation template for stopping and starting lower environment EC2 instances after business hours and before the business day begins.
+
 
 ## Purpose
 
@@ -9,9 +10,9 @@
 ### Features
 To configure and implement this solution, we use the following high-level features:
 
-    * <b>The key "schedule" and a value in the format <code>06:00-21:00</code> should be included in the EC2 instance tag</b>
-    * <b>If you schedule to start your instance at 9AM, the time should be 09:00, not 9 or 9:00</b>.
-    * <b>Keep in mind that lambda uses UTC timezone. Convert your hours to UTC based on your work location</b>.
+    * The key "schedule" and a value in the format <code>06:00-21:00</code> should be included in the EC2 instance tag
+    * If you schedule to start your instance at 9AM, the time should be 09:00, not 9 or 9:00.
+    * Keep in mind that lambda uses UTC timezone. Convert your hours to UTC based on your work location.
     * ![Screenshot](EC2_Tag_example.png)
 
 
