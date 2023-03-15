@@ -1,0 +1,123 @@
+---
+AWSTemplateFormatVersion : "2010-09-09"
+Description:  >-
+  This template helps to start stop your lower environments instances on timely basis based on your tagged time windows
+  on each instances. 
+  Function to stop/start operation according to your tag
+  The tag should include the key "schedule" and a value in the format 06:00-21:00.
+  If you schedule a start instance for 9 a.m., the time should be 09:00, not 9 or 9:00.
+  Keep in mind that lambda uses UTC timezone. Convert your hours to UTC based on your work location.
+
+Parameters:
+  AutoStopStartEC2Schedule:
+    Default: cron(05 * * * ? *)
+    Description: Cronjob scheduled to run this script for 5mins past every hour
+    Type: String
+    MinLength: 10
+    MaxLength: 30
+
+Resources:
+  LambdaEC2Role:
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "lambda.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns: 
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+      - PolicyName: LambdaEC2Policy
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Effect: Allow
+            Action: 
+            - ec2:StartInstances
+            - ec2:StopInstances
+            Resource: 'arn:aws:ec2:*:*:instance/*'
+
+          - Effect: Allow
+            Action:
+            - ec2:DescribeInstances
+            - ec2:DescribeTags
+            - ec2:DescribeInstanceStatus
+            Resource: '*'
+
+  LambdaStartStopEC2:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName: "LambdaStartStopEC2"
+      Runtime: "python3.9"
+      MemorySize: 128
+      Role: !GetAtt LambdaEC2Role.Arn
+      Handler: "index.lambda_handler"
+      Timeout: 60
+      ReservedConcurrentExecutions: 10
+      Code:
+        ZipFile:  |
+          import boto3
+          from datetime import datetime
+          import logging
+          import os
+
+          now = datetime.now()
+          current_time = now.strftime("%H:%M")
+          print("Current_Time =", current_time)
+
+          # REGION = 'eu-central-1'
+          REGION = os.environ['AWS_REGION']
+
+          ec2 = boto3.resource('ec2', region_name=REGION)
+
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
+          def lambda_handler(event, context):
+            instances = ec2.instances.all()
+            for instance in instances:  
+                print(instance.id, instance.instance_type)
+                for tag in instance.tags:
+                    if tag['Key'] == 'schedule':
+                        sch_time = tag['Value'].split('-')
+                        print(f"Actual schedule start time:",sch_time[0]) 
+                        print(f"Actual schedule stop time:",sch_time[1]) 
+                        if current_time >= sch_time[0] and current_time <= sch_time[1]:
+                            if instance.state["Name"] != "running":
+                                print("Lambda is being triggered to start ec2 lower environment instances :",instance.id)
+                                print("The instance is currently Not running and must be started : ", instance.id)
+                                ec2.instances.filter(InstanceIds=[instance.id]).start()
+                            else:
+                                print("Everything is already up and running as per schedule :", instance.id)
+                        else:
+                            print("Lambda is being triggered to stop ec2 lower environment instances :", instance.id)
+                            if instance.state["Name"] == "running":
+                                print("The instance is currently running and must be stopped : ", instance.id)
+                                ec2.instances.filter(InstanceIds=[instance.id]).stop()
+                            else:
+                                print("Nothing is running and everything has come to a halt as planned:", instance.id)                      
+  StartStopEC2Rule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name:  StartStopEC2Rule
+      Description: Start/Stop your lower environment based on your schedule time window 
+      ScheduleExpression: !Ref AutoStopStartEC2Schedule
+      State: ENABLED
+      Targets:
+      - 
+        Arn:  !GetAtt LambdaStartStopEC2.Arn
+        Id: LambdaStartStopEC2
+
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties: 
+      FunctionName: !GetAtt LambdaStartStopEC2.Arn
+      Action: lambda:InvokeFunction
+      Principal: "events.amazonaws.com"
+      SourceArn: !GetAtt StartStopEC2Rule.Arn
