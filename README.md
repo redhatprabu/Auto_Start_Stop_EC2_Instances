@@ -1,7 +1,7 @@
 ### Cloudformation template for stopping and starting lower environment EC2 instances after business hours and before the business day begins.
 
 
-## Purpose
+## Why this stack ? 
 
 * As your estate grows, you may need some automation to manage your operations and possibly reduce the time it takes to implement when business demands.
 
@@ -18,11 +18,11 @@ To configure and implement this solution, we use the following high-level featur
 
 ## Configuration involved
 
-    * <code>Cloudformation</code>
-    * <code>Python</code>
-    * <code>Lambda</code>
-    * <code>IAM</code>
-    * <code>eventbridge rule</code>
+    * Cloudformation
+    * Python
+    * Lambda
+    * IAM
+    * Eventbridge
 
 ## Steps
     The steps you need to follow to deploy the stack.
