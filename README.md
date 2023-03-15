@@ -54,12 +54,12 @@ To configure and implement this solution, we use the following high-level featur
 
 ## Resources
 
-    *	Configure a predefined tags in Amazon EC2: eg : key = schedule , value = HH:MM-HH:MM eg: 08:00-23:00  ( make sure you use '-' between start and stop time)
+*	Configure a predefined tags in Amazon EC2: eg : key = schedule , value = HH:MM-HH:MM eg: 08:00-23:00  ( make sure you use '-' between start and stop time)
     *   AutoStopStartEC2Schedule – Cron is set to run hourly, for example, at 12:05, with subsequent runs at 13:05 and 14:05. You can change it based on your business requirements.
     *   LambdaEC2Role – IAM Role to assume for lambda service
     *   LambdaStartStopEC2 – lambda serverless function with code written in Python3.9 as input
     *   StartStopEC2Rule – Eventbridge rule to run this script at the specified time.
-<code> cron(05 * * * ? *) </code> - Modify the timings based on your business needs
+    *   Modify the timings based on your business needs on eventbridge settings <code>cron(05 * * * ? *)</code> . This scripts runs every hour after 5 mins .eg : 01:05 AM, 02:05 AM, 03:05 AM
     *   PermissionForEventsToInvokeLambda – Permission to invoke lambda function by your eventbridgerule
 
 
