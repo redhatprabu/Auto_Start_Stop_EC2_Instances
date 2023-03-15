@@ -1,6 +1,6 @@
 ---
-title: Syntegra Cost Optimization
-author: Prabs & Ravi
+title: Cost Optimization
+author: Prabs
 date: 15-03-2023
 ---
 
@@ -47,9 +47,10 @@ To configure and implement this solution, we use the following high-level featur
     9.  Select Create stack.
     10. To track the resource creation status, open the stack and navigate to the Resources tab.
 
-## To delete all resources created by this template, navigate to the AWS CloudFormation console, select the stack, and then delete stack.
+<b> To delete all resources created by this template, navigate to the AWS CloudFormation console, select the stack, and then delete stack.</b>
 
-## Stack DeepDive - EC2_stat_stop.yaml
+
+## Stack DeepDive - EC2_start_stop.yaml
 
 ## Resources
 
