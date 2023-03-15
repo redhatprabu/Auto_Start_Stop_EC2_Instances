@@ -19,7 +19,7 @@ To configure and implement this solution, we use the following high-level featur
     * The key "schedule" and a value in the format <code>06:00-21:00</code> should be included in the EC2 instance tag
     * If you schedule to start your instance at 9AM, the time should be 09:00, not 9 or 9:00.
     * Keep in mind that lambda uses UTC timezone. Convert your hours to UTC based on your work location.
-![tag](../images/EC2_Tag_example.jpg)
+![tag](images/EC2_Tag_example.jpg)
 
 
 ## Configuration involved
