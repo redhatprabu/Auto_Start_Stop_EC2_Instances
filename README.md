@@ -38,4 +38,4 @@ To configure and implement this solution, we use the following high-level featur
     9.  Select Create stack.
     10. To track the resource creation status, open the stack and navigate to the Resources tab.
 
-## To delete all resources created with this template, go to the AWS CloudFormation console and select Delete. To confirm the stack deletion, select Delete stack.
+## To delete all resources created by this template, navigate to the AWS CloudFormation console, select the stack, and then delete stack.
